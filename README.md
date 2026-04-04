@@ -1,0 +1,92 @@
+# Catch-All Email Verifier - Python Library
+
+[![PyPI version](https://img.shields.io/pypi/v/catch-all-email-verifier.svg)](https://pypi.org/project/catch-all-email-verifier/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+Verify emails on catch-all domains with deterministic verification. Most verifiers mark catch-all emails as "risky" or "unknown" -- this one tells you if the specific mailbox actually exists.
+
+Powered by [Enrow](https://enrow.io) -- deterministic email verification, not probabilistic.
+
+## The catch-all problem
+
+A catch-all (or accept-all) domain is configured to accept mail sent to any address at that domain, whether or not the specific mailbox exists. This means `anything@company.com` will not bounce at the SMTP level, so traditional email verifiers cannot distinguish real inboxes from non-existent ones. They return "accept-all", "risky", or "unknown" and leave you guessing.
+
+Enrow uses deterministic verification techniques that go beyond SMTP handshake checks, resolving the actual mailbox existence on catch-all domains. The result is a clear valid/invalid verdict instead of an inconclusive shrug.
+
+## Installation
+
+```bash
+pip install catch-all-email-verifier
+```
+
+Requires Python 3.8+. Only dependency: `httpx`.
+
+## Simple Usage
+
+```python
+from enrow_catch_all_verifier import verify_catch_all, get_verification_result
+
+verification = verify_catch_all(
+    api_key="your_api_key",
+    email="tcook@apple.com",
+)
+
+result = get_verification_result("your_api_key", verification["id"])
+
+print(result["qualification"])  # valid
+print(result["isDeliverable"])  # True
+print(result["isCatchAll"])     # False
+```
+
+`verify_catch_all` returns a verification ID. The verification runs asynchronously -- call `get_verification_result` to retrieve the result once it's ready. You can also pass a `webhook` URL to get notified automatically.
+
+## Bulk verification
+
+```python
+from enrow_catch_all_verifier import verify_catch_all_bulk, get_verification_results
+
+batch = verify_catch_all_bulk(
+    api_key="your_api_key",
+    emails=[
+        "tcook@apple.com",
+        "satya@microsoft.com",
+        "jensen@nvidia.com",
+    ],
+)
+
+# batch["batchId"], batch["total"], batch["status"]
+
+results = get_verification_results("your_api_key", batch["batchId"])
+# results["results"] -- list of verification result dicts
+```
+
+Up to 5,000 verifications per batch. Pass a `webhook` URL to get notified when the batch completes.
+
+## Error handling
+
+```python
+try:
+    verify_catch_all(api_key="bad_key", email="test@test.com")
+except Exception as e:
+    # str(e) contains the API error description
+    # Common errors:
+    # - "Invalid or missing API key" (401)
+    # - "Your credit balance is insufficient." (402)
+    # - "Rate limit exceeded" (429)
+    print(e)
+```
+
+## Getting an API key
+
+Register at [app.enrow.io](https://app.enrow.io) to get your API key. You get **50 free credits** (= 200 verifications) with no credit card required.
+
+Each verification costs **0.25 credits**. Paid plans start at **$17/mo** up to **$497/mo**. See [pricing](https://enrow.io/pricing).
+
+## Documentation
+
+- [Enrow API documentation](https://docs.enrow.io)
+- [Full Enrow SDK](https://github.com/enrow/enrow-python) -- includes email finder, phone finder, reverse email lookup, and more
+
+## License
+
+MIT -- see [LICENSE](LICENSE) for details.
