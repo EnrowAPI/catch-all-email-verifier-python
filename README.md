@@ -2,6 +2,8 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/catch-all-email-verifier.svg)](https://pypi.org/project/catch-all-email-verifier/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/EnrowAPI/catch-all-email-verifier-python)](https://github.com/EnrowAPI/catch-all-email-verifier-python)
+[![Last commit](https://img.shields.io/github/last-commit/EnrowAPI/catch-all-email-verifier-python)](https://github.com/EnrowAPI/catch-all-email-verifier-python/commits)
 
 Verify emails on catch-all domains with deterministic verification. Most verifiers mark catch-all emails as "risky" or "unknown" -- this one tells you if the specific mailbox actually exists.
 
@@ -85,7 +87,7 @@ Each verification costs **0.25 credits**. Paid plans start at **$17/mo** up to *
 ## Documentation
 
 - [Enrow API documentation](https://docs.enrow.io)
-- [Full Enrow SDK](https://github.com/enrow/enrow-python) -- includes email finder, phone finder, reverse email lookup, and more
+- [Full Enrow SDK](https://github.com/EnrowAPI/enrow-python) -- includes email finder, phone finder, reverse email lookup, and more
 
 ## License
 
